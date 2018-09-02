@@ -1,4 +1,7 @@
+import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -6,10 +9,49 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  signupForm: FormGroup;
+  errorMessage: string;
+  showSpinner = false;
 
-  constructor() { }
+  constructor(private authService: AuthService,
+    private fb: FormBuilder,
+    private router: Router) { }
 
   ngOnInit() {
+    this.init();
   }
 
+  init() {
+    this.signupForm = this.fb.group({
+      username: ['', Validators.required],
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', Validators.required]
+    });
+  }
+
+  signupUser() {
+    this.showSpinner = true;
+    // console.log(this.signupForm.value);
+    this.authService.registerUser(this.signupForm.value)
+      .subscribe(data => {
+        this.signupForm.reset();
+        setTimeout(() => {
+          this.router.navigate(['streams']);
+        }, 3000);
+        console.log(data);
+      }, err => {
+        this.showSpinner = false;
+        // console.error(err);
+        // console.log(err);
+        //If we have array of messages
+        if (err.error.msg) {
+          this.errorMessage = err.error.msg[0].message;
+        }
+
+        //If we have an error message
+        if (err.error.message) {
+          this.errorMessage = err.error.message;
+        }
+      });
+  }
 }
