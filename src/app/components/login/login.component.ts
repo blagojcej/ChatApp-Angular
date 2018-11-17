@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +9,46 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
+  errorMessage: string;
+  showSpinner = false;
 
-  constructor() { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
+    this.init();
+  }
+
+  init() {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    })
+  }
+
+  loginUser() {
+    this.showSpinner=true;
+    this.authService.loginUser(this.loginForm.value)
+    .subscribe(data => {
+      this.loginForm.reset();
+        setTimeout(() => {
+          this.router.navigate(['streams']);
+        }, 3000);
+        console.log(data);
+    }, err => {
+      this.showSpinner = false;
+      // console.error(err);
+      // console.log(err);
+      //If we have array of messages
+      if (err.error.msg) {
+        this.errorMessage = err.error.msg[0].message;
+      }
+
+      //If we have an error message
+      if (err.error.message) {
+        this.errorMessage = err.error.message;
+      }
+    })
   }
 
 }
