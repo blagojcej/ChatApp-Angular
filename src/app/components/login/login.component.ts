@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,10 @@ export class LoginComponent implements OnInit {
   errorMessage: string;
   showSpinner = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private tokenService: TokenService) { }
 
   ngOnInit() {
     this.init();
@@ -27,28 +31,30 @@ export class LoginComponent implements OnInit {
   }
 
   loginUser() {
-    this.showSpinner=true;
+    this.showSpinner = true;
     this.authService.loginUser(this.loginForm.value)
-    .subscribe(data => {
-      this.loginForm.reset();
+      .subscribe(data => {
+        //Set token
+        this.tokenService.SetToken(data.token);
+        this.loginForm.reset();
         setTimeout(() => {
           this.router.navigate(['streams']);
-        }, 3000);
-        console.log(data);
-    }, err => {
-      this.showSpinner = false;
-      // console.error(err);
-      // console.log(err);
-      //If we have array of messages
-      if (err.error.msg) {
-        this.errorMessage = err.error.msg[0].message;
-      }
+        }, 1000);
+        // console.log(data);
+      }, err => {
+        this.showSpinner = false;
+        // console.error(err);
+        // console.log(err);
+        //If we have array of messages
+        if (err.error.msg) {
+          this.errorMessage = err.error.msg[0].message;
+        }
 
-      //If we have an error message
-      if (err.error.message) {
-        this.errorMessage = err.error.message;
-      }
-    })
+        //If we have an error message
+        if (err.error.message) {
+          this.errorMessage = err.error.message;
+        }
+      })
   }
 
 }

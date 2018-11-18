@@ -2,6 +2,7 @@ import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-signup',
@@ -15,7 +16,8 @@ export class SignupComponent implements OnInit {
 
   constructor(private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private tokenService: TokenService) { }
 
   ngOnInit() {
     this.init();
@@ -34,11 +36,13 @@ export class SignupComponent implements OnInit {
     // console.log(this.signupForm.value);
     this.authService.registerUser(this.signupForm.value)
       .subscribe(data => {
+        //Set token
+        this.tokenService.SetToken(data.token);
         this.signupForm.reset();
         setTimeout(() => {
           this.router.navigate(['streams']);
         }, 3000);
-        console.log(data);
+        // console.log(data);
       }, err => {
         this.showSpinner = false;
         // console.error(err);
