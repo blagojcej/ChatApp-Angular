@@ -14,6 +14,10 @@ export class PostsService {
   addPost(body): Observable<any> {
     return this.http.post(`${BASEURL}/post/add-post`, body);
   }
+  
+  addLike(body): Observable<any> {
+    return this.http.post(`${BASEURL}/post/add-like`, body);
+  }
 
   getAppPosts() {
     return this.http.get<{ message: string, posts: any }>(`${BASEURL}/posts`);
