@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import io from 'socket.io-client';
 import _ from 'lodash';
 import { TokenService } from 'src/app/services/token.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posts',
@@ -15,12 +16,12 @@ export class PostsComponent implements OnInit {
   posts = [];
   user: any;
 
-  constructor(private postsService: PostsService, private tokenService: TokenService) {
+  constructor(private postsService: PostsService, private tokenService: TokenService, private router: Router) {
     this.socket = io('http://localhost:3000');
   }
 
   ngOnInit() {
-    this.user=this.tokenService.GetPayload();
+    this.user = this.tokenService.GetPayload();
 
     this.AllPosts();
     this.socket.on('refreshPage', (data) => {
@@ -33,6 +34,11 @@ export class PostsComponent implements OnInit {
       .subscribe((data) => {
         console.log(data.posts);
         this.posts = data.posts;
+      }, err => {
+        if (err.error.token === null) {
+          this.tokenService.DeleteToken();
+          this.router.navigate(['']);
+        }
       });
   }
 
@@ -46,10 +52,14 @@ export class PostsComponent implements OnInit {
   }
 
   CheckInLikesAray(arr, username) {
-    return _.some(arr, {username: username});
+    return _.some(arr, { username: username });
   }
 
   TimeFromNow(time) {
     return moment(time).fromNow();
+  }
+
+  openCommentBox(post) {
+    this.router.navigate(['post', post._id]);
   }
 }

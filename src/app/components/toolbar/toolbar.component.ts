@@ -13,13 +13,16 @@ export class ToolbarComponent implements OnInit {
   constructor(private tokenService: TokenService, private router: Router) { }
 
   ngOnInit() {
-    this.user=this.tokenService.GetPayload();
+    this.user = this.tokenService.GetPayload();
     // console.log(this.user);
   }
-  
+
   logout() {
     this.tokenService.DeleteToken();
     this.router.navigate(['/']);
   }
 
+  GoToHome() {
+    this.router.navigate(['streams']);
+  }
 }
