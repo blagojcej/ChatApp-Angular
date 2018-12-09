@@ -5,21 +5,23 @@
   </div>
   <div class="col s12 m4">
     <a><span>Following</span></a>
-    <p  class="num">0</p>
+    <p class="num">0</p>
   </div>
   <div class="col s12 m4">
     <a><span>Followers</span></a>
-    <p  class="num">0</p>
+    <p class="num">0</p>
   </div>
 </div>
 <ul class="collection with-header">
   <li class="collection-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-    <a [routerLink]="['/streams']" >
+    <a [routerLink]="['/streams']">
       <div>Streams<a href="#!" class="secondary-content"><i class="material-icons">announcement</i></a></div>
     </a>
   </li>
-  <li class="collection-item">
-    <div>People<a href="#!" class="secondary-content"><i class="material-icons">people</i></a></div>
+  <li class="collection-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+    <a [routerLink]="['/people']">
+      <div>People<a href="#!" class="secondary-content"><i class="material-icons">people</i></a></div>
+    </a>
   </li>
   <li class="collection-item">
     <div>Following<a href="#!" class="secondary-content"><i class="material-icons">people</i></a></div>

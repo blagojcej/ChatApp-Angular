@@ -10,6 +10,8 @@ import { PostsService } from '../services/posts.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommentsComponent } from '../components/comments/comments.component';
 import { RouterModule } from '@angular/router';
+import { PeopleComponent } from '../components/people/people.component';
+import { UsersService } from '../services/users.service';
 
 @NgModule({
   imports: [
@@ -18,11 +20,12 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule, 
     RouterModule
   ],
-  declarations: [StreamsComponent, ToolbarComponent, SideComponent, PostFormComponent, PostsComponent, CommentsComponent],
+  declarations: [StreamsComponent, ToolbarComponent, SideComponent, PostFormComponent, PostsComponent, CommentsComponent, PeopleComponent],
   exports: [StreamsComponent, ToolbarComponent],
   providers: [
     TokenService,
-    PostsService
+    PostsService,
+    UsersService
   ]
 })
 export class StreamsModule { }
