@@ -32,4 +32,12 @@ export class PeopleComponent implements OnInit {
         this.users = data.result;
       });
   }
+
+  FollowUser(user) {
+    // console.log(user);
+    this.usersService.FollowUser(user._id)
+      .subscribe(data => {
+        console.log(data);
+      })
+  }
 }
