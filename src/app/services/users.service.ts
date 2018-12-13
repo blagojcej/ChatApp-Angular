@@ -15,6 +15,14 @@ export class UsersService {
     return this.http.get(`${BASEURL}/users`);
   }
 
+  GetUserById(id): Observable<any> {
+    return this.http.get(`${BASEURL}/user/${id}`);
+  }
+
+  GetUserByName(username): Observable<any> {
+    return this.http.get(`${BASEURL}/user/${username}`);
+  }
+
   // When we use like this, we're using then methon instead of subscribing it
   // async GetAllUsers() {
   //   return await this.http.get(`${BASEURL}/users`);
