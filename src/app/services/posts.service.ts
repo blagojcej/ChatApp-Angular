@@ -28,7 +28,7 @@ export class PostsService {
   }
 
   getAppPosts() {
-    return this.http.get<{ message: string, posts: any }>(`${BASEURL}/posts`);
+    return this.http.get<{ message: string, posts: any, top: any }>(`${BASEURL}/posts`);
   }
 
   getPost(id) : Observable<any> {

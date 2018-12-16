@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   GetUserByName(username): Observable<any> {
-    return this.http.get(`${BASEURL}/user/${username}`);
+    return this.http.get(`${BASEURL}/username/${username}`);
   }
 
   // When we use like this, we're using then methon instead of subscribing it
@@ -30,5 +30,20 @@ export class UsersService {
 
   FollowUser(userFollowed): Observable<any> {
     return this.http.post(`${BASEURL}/follow-user`, { userFollowed: userFollowed });
+  }
+
+  UnFollowUser(userFollowed): Observable<any> {
+    return this.http.post(`${BASEURL}/unfollow-user`, { userFollowed: userFollowed });
+  }
+
+  // ? means optional parameter
+  MarkNotification(id, deleteVal?): Observable<any> {
+    return this.http.post(`${BASEURL}/mark/${id}`, { id, deleteVal });
+  }
+
+  markAllAsRead(): Observable<any> {
+    return this.http.post(`${BASEURL}/mark-all`, {
+      all: true
+    });
   }
 }

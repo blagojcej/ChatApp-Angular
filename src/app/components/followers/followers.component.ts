@@ -4,32 +4,38 @@ import { UsersService } from 'src/app/services/users.service';
 import io from 'socket.io-client';
 
 @Component({
-  selector: 'app-side',
-  templateUrl: './side.component.html',
-  styleUrls: ['./side.component.css']
+  selector: 'app-followers',
+  templateUrl: './followers.component.html',
+  styleUrls: ['./followers.component.css']
 })
-export class SideComponent implements OnInit {
+export class FollowersComponent implements OnInit {
   socket: any;
+  followers = [];
   user: any;
-  userData: any;
 
   constructor(private tokenService: TokenService, private usersService: UsersService) {
     this.socket = io('http://localhost:3000');
-  }
+   }
 
   ngOnInit() {
     this.user = this.tokenService.GetPayload();
-    this.getUser();
-    this.socket.on('refreshPage', () => {
-      this.getUser();
-    });
+
+    this.GetUser();
+
+        // When user click on Follow User in People Component listen refreshPage event
+        this.socket.on('refreshPage', () => {
+          this.GetUser();
+        });
+    
   }
 
-  getUser() {
+  GetUser() {
     this.usersService.GetUserById(this.user._id)
       .subscribe(data => {
-        console.log(data.result);
-        this.userData = data.result;
+        console.log(data);
+        this.followers = data.result.followers;
+      }, error => {
+        console.log(error);
       });
   }
 
