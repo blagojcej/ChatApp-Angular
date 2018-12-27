@@ -1,3 +1,4 @@
+import { MessageService } from './../services/message.service';
 import { StreamsComponent } from './../components/streams/streams.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -31,7 +32,8 @@ import { MessageComponent } from '../components/message/message.component';
   providers: [
     TokenService,
     PostsService,
-    UsersService
+    UsersService,
+    MessageService
   ]
 })
 export class StreamsModule { }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenService } from '../../services/token.service';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-message',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private tokenService: TokenService, private messageService: MessageService) { }
 
   ngOnInit() {
   }
 
+  sendMessage() {
+    
+  }
 }
