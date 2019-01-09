@@ -18,6 +18,7 @@ export class ToolbarComponent implements OnInit {
   user: any;
   notifications = [];
   count = [];
+  chatList = [];
 
   constructor(private tokenService: TokenService, private router: Router, private usersService: UsersService) {
     this.socket = io('http://localhost:3000');
@@ -29,6 +30,13 @@ export class ToolbarComponent implements OnInit {
 
     const dropdownElement = document.querySelector('.dropdown-trigger');
     M.Dropdown.init(dropdownElement, {
+      aligment: 'right',
+      hover: true,
+      coverTrigger: false
+    });
+
+    const dropdownElementTwo = document.querySelector('.dropdown-trigger1');
+    M.Dropdown.init(dropdownElementTwo, {
       aligment: 'right',
       hover: true,
       coverTrigger: false
@@ -48,6 +56,8 @@ export class ToolbarComponent implements OnInit {
         const value = _.filter(this.notifications, ['read', false]);
         // console.log(value);
         this.count = value;
+        this.chatList = data.result.chatList;
+        console.log(this.chatList);
       }, err => {
         if (err.error.token === null) {
           this.tokenService.DeleteToken();
@@ -75,5 +85,14 @@ export class ToolbarComponent implements OnInit {
 
   TimeFromNow(time) {
     return moment(time).fromNow();
+  }
+
+  messageDate(data) {
+    return moment(data).calendar(null, {
+      sameDay: '[Today]',
+      lastDay: '[Yesterday]',
+      lastWeek: 'DD/MM/YYYY',      
+      sameElse: 'DD/MM/YYYY',      
+    });
   }
 }

@@ -18,6 +18,8 @@ export class MessageComponent implements OnInit, AfterViewInit {
   receiverData: any;
   messagesArray = [];
   socket: any;
+  typingMessage;
+  typing = false;
 
   constructor(
     private tokenService: TokenService,
@@ -40,6 +42,22 @@ export class MessageComponent implements OnInit, AfterViewInit {
           this.GetUserByUsername(this.receiver);
         });
       });
+
+    this.socket.on('is_typing', data => {
+      // if received from the receiver, then show data
+      if (data.sender === this.receiver) {
+        // console.log(data);
+        this.typing = true;
+      }
+    });
+    
+    this.socket.on('has_stopped_typing', data => {
+      // if received from the receiver, then show data
+      if (data.sender === this.receiver) {
+        // console.log(data);
+        this.typing = false;
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -80,5 +98,26 @@ export class MessageComponent implements OnInit, AfterViewInit {
         // console.log(data);
         this.messagesArray = data.messages.message;
       });
+  }
+
+  isTyping() {
+    // console.log('Typing a message');
+    this.socket.emit('start_typing', {
+      sender: this.user.username,
+      receiver: this.receiver
+    });
+
+    // if already typingMessage is set, reset the timeout
+    if(this.typingMessage) {
+      clearTimeout(this.typingMessage);
+    }
+
+    // How fast event we want to be fired (500 - miliseconds)
+    this.typingMessage = setTimeout(() => {
+      this.socket.emit('stop_typing', {
+        sender: this.user.username,
+        receiver: this.receiver
+      });
+    }, 500);
   }
 }
